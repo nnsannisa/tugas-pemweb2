@@ -20,7 +20,7 @@ class StudentController extends Controller
 
     /**
      * FUNGSI TAMPILKAN DATA
-     * Menampilkan semua data mahasiswa
+     * Bisa diakses oleh admin dan user
      */
     public function index(): JsonResponse
     {
@@ -36,7 +36,7 @@ class StudentController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Gagal mengambil data mahasiswa',
+                'message' => 'Gagal mengambil data',
                 'error'   => $e->getMessage(),
             ], 500);
         }
@@ -44,12 +44,11 @@ class StudentController extends Controller
 
     /**
      * FUNGSI TAMBAH DATA
-     * Menyimpan data mahasiswa baru
-     * Dilengkapi: request validasi, error handling, service refactor
+     * Bisa diakses oleh admin dan user
+     * Dengan request validasi, error handling, dan service refactor
      */
     public function store(Request $request): JsonResponse
     {
-        // Request Validasi
         try {
             $validated = $request->validate([
                 'nama'    => 'required|string|max:100',
@@ -68,7 +67,6 @@ class StudentController extends Controller
             ]);
 
         } catch (ValidationException $e) {
-            // Error Handling - Validasi gagal
             return response()->json([
                 'success' => false,
                 'message' => 'Validasi gagal',
@@ -76,7 +74,6 @@ class StudentController extends Controller
             ], 422);
         }
 
-        // Service Refactor - proses disimpan via StudentService
         try {
             $student = $this->studentService->createStudent($validated);
 
@@ -89,7 +86,7 @@ class StudentController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Gagal menambahkan data mahasiswa',
+                'message' => 'Gagal menambahkan data',
                 'error'   => $e->getMessage(),
             ], 500);
         }
@@ -97,7 +94,7 @@ class StudentController extends Controller
 
     /**
      * FUNGSI UBAH DATA
-     * Mengupdate data mahasiswa berdasarkan ID
+     * Bisa diakses oleh admin dan user
      */
     public function update(Request $request, $id): JsonResponse
     {
@@ -136,7 +133,7 @@ class StudentController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Gagal memperbarui data mahasiswa',
+                'message' => 'Gagal memperbarui data',
                 'error'   => $e->getMessage(),
             ], 500);
         }
@@ -144,7 +141,7 @@ class StudentController extends Controller
 
     /**
      * FUNGSI HAPUS DATA
-     * Menghapus data mahasiswa berdasarkan ID
+     * Hanya bisa diakses oleh admin (diatur di routes)
      */
     public function destroy($id): JsonResponse
     {
@@ -166,7 +163,7 @@ class StudentController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Gagal menghapus data mahasiswa',
+                'message' => 'Gagal menghapus data',
                 'error'   => $e->getMessage(),
             ], 500);
         }
